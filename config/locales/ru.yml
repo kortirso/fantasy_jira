@@ -1,0 +1,30 @@
+ru:
+  controllers:
+    application:
+      page_not_found: Страница не найдена
+    authentication:
+      permission: Необходимо войти
+    users:
+      registrations:
+        success_create: Вы зарегистрированы
+      sessions:
+        success_create: Вы вошли
+        success_destroy: Вы вышли
+        invalid: Неверные данные
+  services:
+    users:
+      create:
+        email_exists: Email уже используется
+        invalid: Данные не верны
+  views:
+    users:
+      registrations:
+        new:
+          sing_up: Регистрация
+          password: Пароль
+          password_confirmation: Подтверждение пароля
+          create: Создать пользователя
+      sessions:
+        new:
+          login: Вход
+          sign_in: Войти

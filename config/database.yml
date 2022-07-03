@@ -1,0 +1,22 @@
+# frozen_string_literal: true
+
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch('RAILS_MAX_THREADS') { 20 } %>
+  host: localhost
+  port: 5432
+
+development:
+  <<: *default
+  database: fantasy_jira_development
+
+test:
+  <<: *default
+  database: fantasy_jira_test
+
+production:
+  <<: *default
+  database: fantasy_jira_production
+  username: fantasy_jira
+  password: <%= ENV['fantasy_jira_DATABASE_PASSWORD'] %>

@@ -1,0 +1,30 @@
+en:
+  controllers:
+    application:
+      page_not_found: Page is not found
+    authentication:
+      permission: Permission is denied
+    users:
+      registrations:
+        success_create: You are signed up
+      sessions:
+        success_create: You are logged in
+        success_destroy: You are logged out
+        invalid: Invalid credentials
+  services:
+    users:
+      create:
+        email_exists: Email is already used
+        invalid: Credentials are invalid
+  views:
+    users:
+      registrations:
+        new:
+          sing_up: Sign up
+          password: Password
+          password_confirmation: Password confirmation
+          create: Create user
+      sessions:
+        new:
+          login: Login
+          sign_in: Sign in
