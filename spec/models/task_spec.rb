@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-describe User, type: :model do
+describe Task, type: :model do
   it 'factory should be valid' do
-    user = build :user
+    task = build :task
 
-    expect(user).to be_valid
+    expect(task).to be_valid
   end
 
   describe 'associations' do
