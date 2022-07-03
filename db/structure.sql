@@ -69,7 +69,7 @@ CREATE TABLE public.schema_migrations (
 CREATE TABLE public.tasks (
     id bigint NOT NULL,
     name character varying DEFAULT ''::character varying NOT NULL,
-    status integer DEFAULT 0 NOT NULL,
+    state integer DEFAULT 0 NOT NULL,
     deadline_at timestamp(6) without time zone,
     canceled_at timestamp(6) without time zone,
     completed_at timestamp(6) without time zone,

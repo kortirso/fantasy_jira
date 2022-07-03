@@ -38,7 +38,7 @@ module Users
     end
 
     def after_login_path
-      root_path
+      tasks_path
     end
 
     def after_logout_path

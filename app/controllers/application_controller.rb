@@ -13,12 +13,16 @@ class ApplicationController < ActionController::Base
 
   def page_not_found
     message = t('controllers.application.page_not_found')
-    return json_response_with_errors([message], 404) if request.format.json?
+    return json_response_with_errors([message], 404) if format_json?
 
     html_response_with_error(message)
   end
 
   private
+
+  def format_json?
+    request.format.json?
+  end
 
   def html_response_with_error(message)
     @message = message

@@ -26,7 +26,7 @@ module Users
     end
 
     def after_registration_path
-      root_path
+      tasks_path
     end
 
     def user_params
