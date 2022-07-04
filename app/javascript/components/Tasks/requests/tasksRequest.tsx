@@ -1,7 +1,7 @@
 import { Attribute } from 'entities';
-import { apiRequest } from 'helpers/apiRequest';
+import { apiRequest } from 'helpers';
 
 export const tasksRequest = async (id: number) => {
   const result = await apiRequest({ url: '/tasks.json' });
-  return result.tasks.map((element: Attribute) => element.attributes);
+  return result.tasks.data.map((element: Attribute) => element.attributes);
 };

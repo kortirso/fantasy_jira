@@ -41,7 +41,7 @@ describe Users::SessionsController, type: :controller do
         it 'redirects to dashboard path' do
           post :create, params: { user: { email: user.email, password: user.password } }
 
-          expect(response).to redirect_to root_path
+          expect(response).to redirect_to tasks_path
         end
       end
 
@@ -49,7 +49,7 @@ describe Users::SessionsController, type: :controller do
         it 'redirects to dashboard path' do
           post :create, params: { user: { email: user.email.upcase, password: user.password } }
 
-          expect(response).to redirect_to root_path
+          expect(response).to redirect_to tasks_path
         end
       end
     end

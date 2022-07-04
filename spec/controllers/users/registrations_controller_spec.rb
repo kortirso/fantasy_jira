@@ -88,7 +88,7 @@ describe Users::RegistrationsController, type: :controller do
       it 'and redirects to dashboard path' do
         request
 
-        expect(response).to redirect_to root_path
+        expect(response).to redirect_to tasks_path
       end
     end
   end
