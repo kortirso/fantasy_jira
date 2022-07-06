@@ -31,21 +31,21 @@ export const Tasks = (): JSX.Element => {
     if (task.state === 'completed' || task.state === 'canceled') return null;
     if (task.state === 'todo') {
       return (
-        <button className="button small">
+        <button className="button small" onClick={() => updateTask({ id: task.id, state: 'in_progress' })}>
           Start
         </button>
       )
     } else {
       return (
         <div className="flex flex-row">
-          <button className="button small">
-            !
+          <button className="button small" onClick={() => updateTask({ id: task.id, state: 'completed' })}>
+            +
           </button>
-          <button className="button small">
+          <button className="button small" onClick={() => updateTask({ id: task.id, state: 'canceled' })}>
             -
           </button>
           <button className="button small">
-            +
+            Approve
           </button>
         </div>
       )
@@ -80,6 +80,35 @@ export const Tasks = (): JSX.Element => {
       submitResult.errors.forEach((error: string) => showAlert('alert', `<p>${error}</p>`));
     }
     setShowModal(false);
+  };
+
+  const updateTask = async (attributes) => {
+    const payload = {
+      task: attributes,
+    };
+
+    const requestOptions = {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': csrfToken(),
+      },
+      body: JSON.stringify(payload),
+    };
+
+    const submitResult = await apiRequest({
+      url: `/tasks/${attributes.id}.json`,
+      options: requestOptions,
+    });
+
+    submitResult.errors.forEach((error: string) => showAlert('alert', `<p>${error}</p>`));
+    const updatedTask = submitResult.task.data.attributes;
+    setTasks(
+      tasks.map((task) => {
+        if (task.id !== attributes.id) return task;
+        return updatedTask;
+      })
+    );
   };
 
   if (!tasks) return <></>;

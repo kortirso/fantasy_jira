@@ -43,6 +43,9 @@ gem 'jsbundling-rails', '~> 1.0'
 
 gem 'foreman'
 
+# state machine
+gem 'aasm', '~> 5.2'
+
 group :development, :test do
   gem 'bullet', git: 'https://github.com/flyerhzm/bullet', branch: 'master'
   gem 'rubocop', '~> 1.23', require: false
