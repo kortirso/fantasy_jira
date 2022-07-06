@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
 
-import { csrfToken, apiRequest, showAlert } from 'helpers';
+import { showAlert } from 'helpers';
 import { Task } from 'entities';
 import { Modal } from 'components/atoms';
 
 import { tasksRequest } from './requests/tasksRequest';
+import { tasksApprovementsRequest } from './requests/tasksApprovementsRequest';
+import { approveTaskRequest } from './requests/approveTaskRequest';
+import { createTaskRequest } from './requests/createTaskRequest';
+import { updateTaskRequest } from './requests/updateTaskRequest';
 
 const statuses: KeyValue = {
   'todo': 'To do',
@@ -15,6 +19,7 @@ const statuses: KeyValue = {
 
 export const Tasks = (): JSX.Element => {
   const [tasks, setTasks] = useState<Task | null>(null);
+  const [tasksApprovements, setTasksApprovements] = useState<any>({});
   const [showModal, setShowModal] = useState(false);
   const [taskName, setTaskName] = useState('');
 
@@ -24,7 +29,13 @@ export const Tasks = (): JSX.Element => {
       setTasks(data);
     };
 
+    const fetchTasksApprovements = async () => {
+      const data = await tasksApprovementsRequest();
+      setTasksApprovements(data);
+    };
+
     fetchTasks();
+    fetchTasksApprovements();
   }, []);
 
   const actionButtons = (task) => {
@@ -44,8 +55,8 @@ export const Tasks = (): JSX.Element => {
           <button className="button small" onClick={() => updateTask({ id: task.id, state: 'canceled' })}>
             -
           </button>
-          <button className="button small">
-            Approve
+          <button className="button small" onClick={() => approveTask(task.id)}>
+            Approve ({tasksApprovements[task.id] || 0})
           </button>
         </div>
       )
@@ -53,62 +64,31 @@ export const Tasks = (): JSX.Element => {
   };
 
   const createTask = async () => {
-    const payload = {
-      task: {
-        name: taskName
-      },
-    };
-
-    const requestOptions = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRF-TOKEN': csrfToken(),
-      },
-      body: JSON.stringify(payload),
-    };
-
-    const submitResult = await apiRequest({
-      url: `/tasks.json`,
-      options: requestOptions,
-    });
-
-    if (!submitResult.errors) {
-      setTasks(tasks.concat(submitResult.task.data.attributes));
+    const result = await createTaskRequest(taskName);
+    if (!result.errors) {
+      setTasks(tasks.concat(result.task.data.attributes));
       showAlert('notice', `<p>Task is created</p>`);
     } else {
-      submitResult.errors.forEach((error: string) => showAlert('alert', `<p>${error}</p>`));
+      result.errors.forEach((error: string) => showAlert('alert', `<p>${error}</p>`));
     }
     setShowModal(false);
   };
 
   const updateTask = async (attributes) => {
-    const payload = {
-      task: attributes,
-    };
-
-    const requestOptions = {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRF-TOKEN': csrfToken(),
-      },
-      body: JSON.stringify(payload),
-    };
-
-    const submitResult = await apiRequest({
-      url: `/tasks/${attributes.id}.json`,
-      options: requestOptions,
-    });
-
-    submitResult.errors.forEach((error: string) => showAlert('alert', `<p>${error}</p>`));
-    const updatedTask = submitResult.task.data.attributes;
+    const result = await updateTaskRequest(attributes);
+    result.errors.forEach((error: string) => showAlert('alert', `<p>${error}</p>`));
+    const updatedTask = result.task.data.attributes;
     setTasks(
       tasks.map((task) => {
         if (task.id !== attributes.id) return task;
         return updatedTask;
       })
     );
+  };
+
+  const approveTask = async (taskId: number) => {
+    const result = await approveTaskRequest(taskId);
+    setTasksApprovements({...tasksApprovements, ...result});
   };
 
   if (!tasks) return <></>;
