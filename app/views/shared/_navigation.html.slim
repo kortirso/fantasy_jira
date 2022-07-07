@@ -1,0 +1,10 @@
+header#page-navigation
+  div
+    - unless Current.user
+      = link_to t('components.page_wrappers.users_component.home'), root_path
+  div
+    - if Current.user
+      = link_to t('components.page_wrappers.users_component.logout'), users_logout_path
+    - else
+      = link_to t('components.page_wrappers.users_component.login'), users_login_path
+      = link_to t('components.page_wrappers.users_component.sign_up'), users_sign_up_path

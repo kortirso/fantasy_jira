@@ -1,0 +1,15 @@
+doctype html
+html
+  head
+    title Fantasy Jira
+    meta content="width=device-width,initial-scale=1" name="viewport"
+    = csrf_meta_tags
+    = csp_meta_tag
+    = stylesheet_link_tag 'application', media: 'all'
+  body
+    input#current_locale type="hidden" value=I18n.locale
+    == render 'shared/navigation'
+    == render 'shared/alerts'
+    == yield
+    #modal-root
+    = javascript_include_tag 'application'

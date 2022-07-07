@@ -46,6 +46,9 @@ gem 'foreman'
 # state machine
 gem 'aasm', '~> 5.2'
 
+# html formatting
+gem 'slim'
+
 group :development, :test do
   gem 'bullet', git: 'https://github.com/flyerhzm/bullet', branch: 'master'
   gem 'rubocop', '~> 1.23', require: false

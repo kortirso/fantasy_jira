@@ -1,0 +1,9 @@
+div#alerts.flash-block
+  - flash.each do |key, message|
+    - if message.is_a?(Array)
+      - message.each do |value|
+        div.flash class=key
+          p= value
+    - else
+      div.flash class=key
+        = message
