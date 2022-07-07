@@ -39,6 +39,7 @@ class TasksController < ApplicationController
 
   def find_tasks
     @tasks = Task.order(created_at: :asc)
+    @tasks = @tasks.where(state: params[:state]) if params[:state].present?
   end
 
   def find_task

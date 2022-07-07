@@ -17,7 +17,7 @@ module Tasks
     private
 
     def find_task
-      @task = Task.find(params[:task_id])
+      @task = Task.where(state: Task::IN_PROGRESS).find(params[:task_id])
     end
   end
 end
