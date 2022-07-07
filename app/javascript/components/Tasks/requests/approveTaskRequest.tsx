@@ -6,7 +6,7 @@ export const approveTaskRequest = async (taskId: number) => {
     headers: {
       'Content-Type': 'application/json',
       'X-CSRF-TOKEN': csrfToken(),
-    }
+    },
   };
 
   const result = await apiRequest({

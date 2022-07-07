@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import { showAlert } from 'helpers';
-import { Task } from 'entities';
+import { Task, TaskInput, KeyValue } from 'entities';
 import { Modal } from 'components/atoms';
 
 import { tasksRequest } from './requests/tasksRequest';
@@ -11,14 +11,14 @@ import { createTaskRequest } from './requests/createTaskRequest';
 import { updateTaskRequest } from './requests/updateTaskRequest';
 
 const statuses: KeyValue = {
-  'todo': 'To do',
-  'in_progress': 'In progress',
-  'completed': 'Completed',
-  'canceled': 'Canceled'
+  todo: 'To do',
+  in_progress: 'In progress',
+  completed: 'Completed',
+  canceled: 'Canceled',
 };
 
 export const Tasks = (): JSX.Element => {
-  const [tasks, setTasks] = useState<Task | null>(null);
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [tasksApprovements, setTasksApprovements] = useState<any>({});
   const [showModal, setShowModal] = useState(false);
   const [taskName, setTaskName] = useState('');
@@ -38,28 +38,37 @@ export const Tasks = (): JSX.Element => {
     fetchTasksApprovements();
   }, []);
 
-  const actionButtons = (task) => {
+  const actionButtons = (task: Task) => {
     if (task.state === 'completed' || task.state === 'canceled') return null;
     if (task.state === 'todo') {
       return (
-        <button className="button small" onClick={() => updateTask({ id: task.id, state: 'in_progress' })}>
+        <button
+          className="button small"
+          onClick={() => updateTask({ id: task.id, state: 'in_progress' })}
+        >
           Start
         </button>
-      )
+      );
     } else {
       return (
         <div className="flex flex-row">
-          <button className="button small" onClick={() => updateTask({ id: task.id, state: 'completed' })}>
+          <button
+            className="button small"
+            onClick={() => updateTask({ id: task.id, state: 'completed' })}
+          >
             +
           </button>
-          <button className="button small" onClick={() => updateTask({ id: task.id, state: 'canceled' })}>
+          <button
+            className="button small"
+            onClick={() => updateTask({ id: task.id, state: 'canceled' })}
+          >
             -
           </button>
           <button className="button small" onClick={() => approveTask(task.id)}>
             Approve ({tasksApprovements[task.id] || 0})
           </button>
         </div>
-      )
+      );
     }
   };
 
@@ -74,7 +83,7 @@ export const Tasks = (): JSX.Element => {
     setShowModal(false);
   };
 
-  const updateTask = async (attributes) => {
+  const updateTask = async (attributes: TaskInput) => {
     const result = await updateTaskRequest(attributes);
     result.errors.forEach((error: string) => showAlert('alert', `<p>${error}</p>`));
     const updatedTask = result.task.data.attributes;
@@ -82,13 +91,13 @@ export const Tasks = (): JSX.Element => {
       tasks.map((task) => {
         if (task.id !== attributes.id) return task;
         return updatedTask;
-      })
+      }),
     );
   };
 
   const approveTask = async (taskId: number) => {
     const result = await approveTaskRequest(taskId);
-    setTasksApprovements({...tasksApprovements, ...result});
+    setTasksApprovements({ ...tasksApprovements, ...result });
   };
 
   if (!tasks) return <></>;
@@ -106,12 +115,14 @@ export const Tasks = (): JSX.Element => {
             ) : null}
           </div>
           <div className="tasks">
-            {tasks.filter(task => task.state === key).map(task => (
-              <div className="task flex flex-row justify-between" key={`task-${task.id}`}>
-                <h3>{task.name}</h3>
-                {actionButtons(task)}
-              </div>
-            ))}
+            {tasks
+              .filter((task) => task.state === key)
+              .map((task) => (
+                <div className="task flex flex-row justify-between" key={`task-${task.id}`}>
+                  <h3>{task.name}</h3>
+                  {actionButtons(task)}
+                </div>
+              ))}
           </div>
         </div>
       ))}
@@ -129,7 +140,9 @@ export const Tasks = (): JSX.Element => {
               onChange={(e) => setTaskName(e.target.value)}
             />
           </div>
-          <button className="button" onClick={createTask}>Create task</button>
+          <button className="button" onClick={createTask}>
+            Create task
+          </button>
         </div>
       </Modal>
     </div>

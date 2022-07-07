@@ -11,5 +11,12 @@ export type KeyValue = {
 };
 
 export interface Task {
+  id: number;
   name: string;
+  state: string;
+}
+
+export interface TaskInput {
+  id?: number;
+  state?: string;
 }
